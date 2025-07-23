@@ -1,4 +1,4 @@
-# Análise de Redes de Interação proteína-proteína com Dados Ômicos com python
+# Análise de Redes de Interação Proteína-Proteína com Dados Ômicos Utilizando Python.
 Código utilizado para analisar algumas métricas de centralidade de uma rede de interação proteína-proteína com dados ômicos, utilizando o NetworkX.
 Esse código é fruto de um trabalho realizado para a matéria de Comunicação e Redes (CR) da Universidade Federal do ABC (UFABC).
 
