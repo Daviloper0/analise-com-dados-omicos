@@ -1,5 +1,6 @@
 import networkx
 # Link permanente do grafo original: https://version-12-0.string-db.org/cgi/network?networkId=bKQZEePSoQZu
+# Link do Google Collab para executar o código: https://colab.research.google.com/drive/1a2C0oMAIWLfMDW-0lni1bCttN_BkneYy?usp=sharing
 def pegarVertices() -> list:
   vertices = [
     "MMP13", # Colagenase 3
