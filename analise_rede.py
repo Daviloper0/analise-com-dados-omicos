@@ -1,4 +1,5 @@
 import networkx
+import tabulate
 # Link permanente do grafo original: https://version-12-0.string-db.org/cgi/network?networkId=bKQZEePSoQZu
 # Link do Google Collab para executar o código: https://colab.research.google.com/drive/1a2C0oMAIWLfMDW-0lni1bCttN_BkneYy?usp=sharing
 def pegarVertices() -> list:
@@ -6,7 +7,7 @@ def pegarVertices() -> list:
     "MMP13", # Colagenase 3
     "COL18A1", # Cadeia de colágeno alfa-1(XVIII)
     "COL14A1", # Cadeia de colágeno alfa-1(XIV)
-    "RUNX2", # Fator de transcrição 2 relacionado a Runt 
+    "RUNX2", # Fator de transcrição 2 relacionado a Runt
     "CBFB", # Subunidade beta do fator de ligação ao núcleo
     "OPTC", # Opticina
     "PRSS1", # Cadeia alfa-tripsina 1
@@ -43,14 +44,28 @@ def construirGrafo() -> networkx.classes.graph.Graph:
   grafo.add_nodes_from(pegarVertices())
   grafo.add_edges_from(pegarArestas())
   return grafo
+
+def resultadoAnaliseVertices(grafo) -> None:
+  resultado = {
+      "Proteína": [],
+      "Centralidade de Grau": [],
+      "Excentricidade do Nó": [],
+      "Centralidade de Intermediação": [],
+      "Centralidade de Autovetor": []
+      }
+  for vertice in grafo.nodes:
+    resultado["Proteína"].append(vertice)
+    resultado["Centralidade de Grau"].append(f" {(networkx.degree_centrality(grafo)[vertice] * 100):.2f} %")
+    # Preferimos analisar algumas métricas utilizando porcentagens, pois indicam melhor a quantidade de nós relacionados com a métrica utilizada.
+    resultado["Excentricidade do Nó"].append(f"{networkx.eccentricity(grafo)[vertice]}")
+    resultado["Centralidade de Intermediação"].append(f"{(networkx.betweenness_centrality(grafo)[vertice] * 100):.2f}%")
+    resultado["Centralidade de Autovetor"].append(f"{(networkx.eigenvector_centrality(grafo)[vertice] * 100):.2f}%")
+
+  print(tabulate.tabulate(resultado, headers = ["Proteína", "Centralidade de Grau", "Excentricidade do Nó", "Centralidade de Intermediação", "Centralidade de Autovetor"], tablefmt = "fancy_grid"))
+
 def main() -> None:
   grafo = construirGrafo()
-  print(f"Centralidade de grau: {(networkx.degree_centrality(grafo)['MMP13'] * 100):.2f}%")
-  # Preferimos analisar algumas métricas utilizando porcentagens, pois indicam melhor a quantidade de nós relacionados com a métrica utilizada.
-  print(f"Excentricidade do nó: {networkx.eccentricity(grafo)['MMP13']}")
-  print(f"Radialidade de grafo: {networkx.radius(grafo)}")
-  # Note que as duas métricas acima são iguais, o que indica que o MMP13 possui a menor excentricidade, e então pode ser considerado o "centro" do grafo
-
-  print(f"Centralidade de intermediação: {(networkx.betweenness_centrality(grafo)['MMP13'] * 100):.2f}%")
-  print(f"Centralidade de autovetor: {(networkx.eigenvector_centrality(grafo)['MMP13'] * 100):.2f}%")
+  print(f"Informações sobre o grafo:")
+  print(f"* Radialidade do grafo: {networkx.radius(grafo)}\n")
+  resultadoAnaliseVertices(grafo)
 main()
